@@ -4,10 +4,9 @@ let seatIDs = [];
 // Part 1
 
 const getSeatID = (array) => {
-	let finalRows = [];
-	let finalColumns = [];
-
 	for (i=0; i<array.length; i++) {
+		let seatID = 0;
+		
 		let rows = 128;
 		let minrow = 0;
 		let maxrow = 127;
@@ -16,49 +15,24 @@ const getSeatID = (array) => {
 		let mincol = 0;
 		let maxcol = 7;
 		
-		for (x=0; x<7; x++) {
+		for (x=0; x<array[i].length; x++) {
 			if (array[i][x] === 'F') {
-				maxrow = minrow + (rows/2)-1
-				rows = rows/2
-
-				if (rows === 1) {
-					finalRows.push(minrow)
-				}
-
-				
+				maxrow = minrow + (rows/2)-1;
+				rows = rows/2;
 			} else if (array[i][x] === 'B') {
-				minrow = maxrow - (rows/2)+1
-				rows = rows/2
-
-				if (rows === 1) {
-					finalRows.push(maxrow)
-				}
+				minrow = maxrow - (rows/2)+1;
+				rows = rows/2;
+			} else if (array[i][x] === 'L') {
+				maxcol = mincol + (cols/2)-1;
+				cols = cols/2;
+			} else if (array[i][x] === 'R') {
+				mincol = maxcol - (cols/2)+1;
+				cols = cols/2;
 			}
 		}
-
-		for (y=7; y<array[i].length; y++) {
-			if (array[i][y] === 'L') {
-				maxcol = mincol + (cols/2)-1
-				cols = cols/2
-
-				if (cols === 1) {
-					finalColumns.push(mincol)
-				}
-			} else if (array[i][y] === 'R') {
-				mincol = maxcol - (cols/2)+1
-				cols = cols/2
-
-				if (cols === 1) {
-					finalColumns.push(maxcol)
-				}
-			}
-		}
+		seatID = minrow*8 + mincol;
+		seatIDs.push(seatID);
 	}
-
-	seatIDs = finalRows.map(function(z, index){
-		return z*8 + finalColumns[index]
-	});
-
 	return Math.max(...seatIDs)
 }
 
