@@ -58,32 +58,7 @@ const valueOfAccTerminated = (array) => {
 
         newInstruction === 'nop' ? tmpInstruction = `jmp ${tmpInstruction.split(' ')[1]}` : tmpInstruction = `nop ${tmpInstruction.split(' ')[1]}`;
         array[i] = tmpInstruction;
-
-
-		// if (instructions.includes(i)) { break; }
-
-		// while (!instructions.includes(i) && count<array.length){
-		// 	let str = array[i];
-		// 	let value = Number(str.split(' ')[1]);
-		// 	instructions.push(i);
-
-		// 	if (i===array.length-1) {
-		// 		console.log(`end of array reached with the instruction: ${str}`);
-		// 		break;
-		// 	}
-
-		// 	if (str.includes('acc')) {
-		// 		acc += value;
-		// 	} else if (str.includes('jmp')) {
-		// 		i += value;
-		// 	} else {
-		// 		continue;
-		// 	}
-		// 	count++;
-		// }
 	}
-	// console.log(count);
-	// return acc;
 }
 
 valueOfAccTerminated(array);
