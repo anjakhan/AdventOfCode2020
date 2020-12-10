@@ -31,17 +31,19 @@ checkSum(array, 25);
 
 // Part 2
 
-const findEncryptionWeakness = (array) => {
+const findEncryptionWeakness = (array, preamble) => {
+	let sum = checkSum(array, preamble);
+
 	for (i=0; i<array.length; i++) {
 		let x = 0;
 		let total = 0;
 		let array1 = array.slice(i);
 		let listOfNo = [];
 
-		while (total <= 258585477 && x<array1.length) {
+		while (total <= sum && x<array1.length) {
 			total+= array1[x];
 
-			if (total === 258585477) {
+			if (total === sum) {
 				listOfNo = array1.slice(0, x+1);
 				let min = listOfNo.sort(compareNumbers)[0]
 				let max = listOfNo.sort(compareNumbers)[listOfNo.length-1]
@@ -57,4 +59,4 @@ const compareNumbers = (a, b) => {
 	return a - b;
 }
 
-findEncryptionWeakness(array)
+findEncryptionWeakness(array, 25)
