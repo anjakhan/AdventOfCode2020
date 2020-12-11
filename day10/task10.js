@@ -4,7 +4,7 @@ const array = [44,41,48,17,35,146,73,3,16,159,11,29,32,63,65,62,126,151,6,124,87
 
 const findJoltDiff = (array) => {
 	let diffArr = [];
-	const input = array.sort(compareNumbers);
+	const input = array.sort((a, b) => a - b);
 
 	const reducer = (accumulator, currentValue) => {
 		diffArr.push(currentValue - accumulator);
@@ -16,58 +16,32 @@ const findJoltDiff = (array) => {
 	let oneDiff = diffArr.filter(diff => diff === 1).length;
 	let threeDiff = diffArr.filter(diff => diff === 3).length+1;
 
-	return `${oneDiff} * ${threeDiff} = ${oneDiff*threeDiff}`;
+	console.log(`Number of differences: ${oneDiff} * ${threeDiff} = ${oneDiff*threeDiff}`);
+	return diffArr;
 }
 
-const compareNumbers = (a, b) => {
-	return a - b;
-}
-
-findJoltDiff(test);
+// findJoltDiff(array);
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Part 2
 
 const findDistinctWays = (array) => {
-	const input = array.sort(compareNumbers);
-	let min = 0;
-	let max = input[input.length-1] + 3;
-	let distinctArr = [[0]];
-
-	input.splice(0, 0, min);
-	input.push(max);
+	let sorted = findJoltDiff(array);
+  	let combis = 1;
+  	let consec = 0;
 	
-	for (i=0; i<input.length; i++) {
-		let z = 0;
-		let temp = [];
-
-		while (z<distinctArr[0].length) {
-			let index = input.indexOf(distinctArr[0][z])
-			let plusOne = input[index+1] - distinctArr[0][z];
-			let plusTwo = input[index+2] - distinctArr[0][z];
-			let plusThree = input[index+3] - distinctArr[0][z];
-	
-			if (index === input.length-1) {
-				temp.push(distinctArr[0][z])
-			} else {
-				if (plusOne === 1 || plusOne === 3) {
-					temp.push(input[index+1])
-				}
-				if (plusTwo === 2) {
-					temp.push(input[index+2])
-				}
-				if (plusThree === 3) {
-					temp.push(input[index+3])
-				}
-			}
-			z++;
-		}
-		distinctArr.push(temp);
-		distinctArr.shift()
-	}
-	
-	return distinctArr[distinctArr.length-1].length
+  	for (let i = 0; i < sorted.length; i++) {
+    		if (sorted[i] === 1 && sorted[i+1] === 1) {
+      			consec++;
+    		} else {
+      			if (consec === 1) combis *= 2;
+      			if (consec === 2) combis *= 4;
+      			if (consec === 3) combis *= 7;
+      			consec = 0;
+    		}
+  	}
+  	return `Total no. of distinct ways: ${combis}`;
 }
 
 findDistinctWays(array);
