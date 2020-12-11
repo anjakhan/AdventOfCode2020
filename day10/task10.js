@@ -39,29 +39,34 @@ const findDistinctWays = (array) => {
 	input.push(max);
 	
 	for (i=0; i<input.length; i++) {
+		let z = 0;
 		let temp = [];
 
-		for (z=0; z<distinctArr[i].length; z++) {
-			let index = input.indexOf(distinctArr[i][z])
-			let plusOne = input[index+1] - distinctArr[i][z];
-			let plusTwo = input[index+2] - distinctArr[i][z];
-			let plusThree = input[index+3] - distinctArr[i][z];
+		while (z<distinctArr[0].length) {
+			let index = input.indexOf(distinctArr[0][z])
+			let plusOne = input[index+1] - distinctArr[0][z];
+			let plusTwo = input[index+2] - distinctArr[0][z];
+			let plusThree = input[index+3] - distinctArr[0][z];
 	
-			if (plusOne === 1 || plusOne === 3) {
-				temp.push(input[index+1])
-			}
-			if (plusTwo === 2) {
-				temp.push(input[index+2])
-			}
-			if (plusThree === 3) {
-				temp.push(input[index+3])
-			}
 			if (index === input.length-1) {
-				temp.push(distinctArr[i][z])
+				temp.push(distinctArr[0][z])
+			} else {
+				if (plusOne === 1 || plusOne === 3) {
+					temp.push(input[index+1])
+				}
+				if (plusTwo === 2) {
+					temp.push(input[index+2])
+				}
+				if (plusThree === 3) {
+					temp.push(input[index+3])
+				}
 			}
+			z++;
 		}
 		distinctArr.push(temp);
+		distinctArr.shift()
 	}
+	
 	return distinctArr[distinctArr.length-1].length
 }
 
