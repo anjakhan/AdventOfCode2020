@@ -74,109 +74,79 @@ const findWaypointDistance = (array) => {
 		}
 		let action = array[i][0];
 		let steps = Number(array[i].slice(1));
+
+		let tempOne = waypoint[1];
+		let tempThree = waypoint[3];
+
 		let indexLE = compass[waypoint[0]].indexOf(waypoint[0]) - (steps/90);
 		let indexLN = compass[waypoint[2]].indexOf(waypoint[2]) - (steps/90);
 		let indexRE = compass[waypoint[0]].indexOf(waypoint[0]) + (steps/90);
 		let indexRN = compass[waypoint[2]].indexOf(waypoint[2]) + (steps/90);
+
 		let tempLN = compass[waypoint[2]][indexLN];
 		let tempLE = compass[waypoint[0]][indexLE];
 		let tempRN = compass[waypoint[2]][indexRN];
 		let tempRE = compass[waypoint[0]][indexRE];
-		let tempE = waypoint[1];
-		let tempN = waypoint[3];
 		
 		console.log (action, steps)
 		
 		switch (action) {
 			case 'N': 
-				waypoint.splice(3, 1, waypoint[3] + steps);
+				waypoint.splice(3, 1, tempThree + steps);
 				break;
 			case 'S':
-				waypoint.splice(3, 1, waypoint[3] - steps);
+				waypoint.splice(3, 1, tempThree - steps);
 				break;
 			case 'E': 
-				waypoint.splice(1, 1, waypoint[1] + steps);
+				waypoint.splice(1, 1, tempOne + steps);
 				break;
 			case 'W': 
-				waypoint.splice(1, 1, waypoint[1] - steps);
+				waypoint.splice(1, 1, tempOne - steps);
 				break;
-			case 'F': eastwest += waypoint[1] * steps; northsouth += waypoint[3] * steps; break;
+			case 'F': 
+				eastwest += tempOne * steps; 
+				northsouth += tempThree * steps; 
+				break;
 			case 'L': 
 				if (steps === 180) {
-					waypoint.splice(0, 1, tempRE);
-					waypoint.splice(2, 1, tempRN);
-					if (waypoint[0] === 'W' && Math.sign(tempE) === 1) {
-						waypoint.splice(1, 1, -tempE);
-					} else if (waypoint[0] === 'E') {
-						waypoint.splice(1, 1, Math.abs(tempE));
-					} else {
-						waypoint.splice(1, 1, tempE);
-					}
-					if (waypoint[2] === 'S' && Math.sign(tempN) === 1) {
-						waypoint.splice(3, 1, -tempN);
-					} else if (waypoint[2] === 'N') {
-						waypoint.splice(3, 1, Math.abs(tempN));
-					}
+					getTurnValues(waypoint, tempLE, tempLN, tempOne, tempThree);
 				} else {
-					waypoint.splice(0, 1, tempLN);
-					waypoint.splice(2, 1, tempLE);
-					
-					if (waypoint[0] === 'W' && Math.sign(tempN) === 1) {
-						waypoint.splice(1, 1, -tempN);
-					} else if (waypoint[0] === 'E') {
-						waypoint.splice(1, 1, Math.abs(tempN));
-					} else {
-						waypoint.splice(1, 1, tempN);
-					}
-					if (waypoint[2] === 'S' && Math.sign(tempE) === 1) {
-						waypoint.splice(3, 1, -tempE);
-					} else if (waypoint[2] === 'N') {
-						waypoint.splice(3, 1, Math.abs(tempE));
-					} else {
-						waypoint.splice(3, 1, tempE);
-					}
+					getTurnValues(waypoint, tempLN, tempLE, tempThree, tempOne);
 				}
 				break;
 			case 'R': 
+			
 				if (steps === 180) {
-					waypoint.splice(0, 1, tempRE);
-					waypoint.splice(2, 1, tempRN);
-					if (waypoint[0] === 'W' && Math.sign(tempE) === 1) {
-						waypoint.splice(1, 1, -tempE);
-					} else if (waypoint[0] === 'E') {
-						waypoint.splice(1, 1, Math.abs(tempE));
-					} else {
-						waypoint.splice(1, 1, tempE);
-					}
-					if (waypoint[2] === 'S' && Math.sign(tempN) === 1) {
-						waypoint.splice(3, 1, -tempN);
-					} else if (waypoint[2] === 'N') {
-						waypoint.splice(3, 1, Math.abs(tempN));
-					} else {
-						waypoint.splice(3, 1, tempN);
-					}
+					getTurnValues(waypoint, tempRE, tempRN, tempOne, tempThree);
 				} else {
-					waypoint.splice(0, 1, tempRN);
-					waypoint.splice(2, 1, tempRE);
-					if (waypoint[0] === 'W' && Math.sign(tempN) === 1) {
-						waypoint.splice(1, 1, -tempN);
-					} else if (waypoint[0] === 'E') {
-						waypoint.splice(1, 1, Math.abs(tempN));
-					} else {
-						waypoint.splice(1, 1, tempN);
-					}
-					if (waypoint[2] === 'S' && Math.sign(tempE) === 1) {
-						waypoint.splice(3, 1, -tempE);
-					} else if (waypoint[2] === 'N') {
-						waypoint.splice(3, 1, Math.abs(tempE));
-					} else {
-						waypoint.splice(3, 1, tempE);
-					}
+					getTurnValues(waypoint, tempRN, tempRE, tempThree, tempOne);
 				}
 				break;
 		}
+		console.log(waypoint)
+		console.log('eastwest: ', eastwest, 'northsouth: ', northsouth)
 	}
 	return Math.abs(eastwest) + Math.abs(northsouth);
+}
+
+const getTurnValues = (waypoint, tempE, tempN, tempOne, tempThree) => {
+	waypoint.splice(0, 1, tempE);
+	waypoint.splice(2, 1, tempN);
+	if (waypoint[0] === 'W' && Math.sign(tempOne) === 1) {
+		waypoint.splice(1, 1, -tempOne);
+	} else if (waypoint[0] === 'E') {
+		waypoint.splice(1, 1, Math.abs(tempOne));
+	} else {
+		waypoint.splice(1, 1, tempOne);
+	}
+	if (waypoint[2] === 'S' && Math.sign(tempThree) === 1) {
+		waypoint.splice(3, 1, -tempThree);
+	} else if (waypoint[2] === 'N') {
+		waypoint.splice(3, 1, Math.abs(tempThree));
+	} else {
+		waypoint.splice(3, 1, tempThree);
+	}
+	return waypoint
 }
 
 findWaypointDistance(array);
